@@ -10,7 +10,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bluebird": "~3.5.1",
-    "ldapauth-fork": "~4.0.2",
+    "ldapauth-fork": "git+https://github.com/regru/node-ldapauth-fork.git",
     "rfc2253": "~0.1.1"
   },
   "devDependencies": {
