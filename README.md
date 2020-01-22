@@ -9,6 +9,10 @@ $ npm install verdaccio
 $ npm install verdaccio-ldap
 ```
 
+> A detailed example of the verdaccio-ldap plugin + OpenLDAP server packed in Docker for v3 is available [here](https://github.com/verdaccio/docker-examples/tree/master/ldap-verdaccio) and for v4 [here](https://github.com/verdaccio/docker-examples/tree/master/ldap-verdaccio-v4).
+
+[Read a guide how to migrate from Verdaccio v3 to v4 using LDAP plugin](https://verdaccio.org/blog/2019/10/05/verdaccio-4-with-ldap-and-docker).
+
 ## Config
 
 Add to your `config.yaml`:
@@ -17,9 +21,14 @@ Add to your `config.yaml`:
 auth:
   ldap:
     type: ldap
+    # Only required if you are fetching groups that do not have a "cn" property. defaults to "cn"
+    groupNameAttribute: "ou"
     # Optional, default false.
-    # If true, then up to 100 credentials at a time will be cached for 5 minutes.
-    cache: false
+    cache:
+      # max credentials to cache (default to 100 if cache is enabled)
+      size: 100
+      # cache expiration in seconds (default to 300 if cache is enabled)
+      expire: 300
     client_options:
       url: "ldaps://ldap.example.com"
       # Only required if you need auth to bind
@@ -35,7 +44,6 @@ auth:
       searchAttributes: ['*', 'memberOf']
       # Else, if you don't (use one or the other):
       # groupSearchFilter: '(memberUid={{dn}})'
-      #
       # Optional
       reconnect: true
 ```
@@ -74,4 +82,3 @@ This should export two functions:
     - `cb(null, [groups])` in case user is authenticated
 
    Groups is an array of all users/usergroups this user has access to. You should probably include username itself here.
-   
